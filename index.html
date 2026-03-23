@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NodeWave — JavaScript & Node.js Blog</title>
+  <link rel="stylesheet" href="./assets/css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">
+        <img src="./assets/img/logo/logo.png" alt="NodeWave logo" />
+      </a>
+
+      <nav class="site-nav">
+        <a href="index.html">Главная</a>
+        <a href="about.html">Обо мне</a>
+        <a href="portfolio.html">Портфолио</a>
+        <a href="https://github.com/anisimV?tab=repositories" target="_blank">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <span class="hero-badge">JavaScript • Node.js • Portfolio</span>
+
+        <h1 class="hero-title">NodeWave</h1>
+
+        <p class="hero-text">
+          Мой личный блог о JavaScript и Node.js. Здесь я публикую статьи,
+          заметки по обучению и реальные учебные проекты, которые пополняют
+          мое портфолио разработчика.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#articles">Читать статьи</a>
+          <a class="btn btn-secondary" href="portfolio.html">Смотреть портфолио</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="articles-section" id="articles">
+      <div class="container">
+        <div class="section-heading">
+          <p class="section-label">Блог</p>
+          <h2>Последние статьи</h2>
+        </div>
+
+        <div class="articles-list">
+          <article class="article-card">
+            <div class="article-content">
+              <p class="article-tag">Node.js</p>
+              <h3>
+                <a href="./articles/nodejs-start.html">С чего начать изучение Node.js</a>
+              </h3>
+              <p>
+                Простое объяснение, что такое Node.js, где он используется,
+                и как новичку начать изучение backend-разработки.
+              </p>
+            </div>
+            <a class="article-link" href="./articles/nodejs-start.html">Открыть статью →</a>
+          </article>
+
+          <article class="article-card">
+            <div class="article-content">
+              <p class="article-tag">JavaScript</p>
+              <h3>
+                <a href="./articles/javascript-basics.html">Основы JavaScript для новичка</a>
+              </h3>
+              <p>
+                Переменные, функции, массивы, объекты и базовые конструкции языка
+                на понятных и практических примерах.
+              </p>
+            </div>
+            <a class="article-link" href="./articles/javascript-basics.html">Открыть статью →</a>
+          </article>
+
+          <article class="article-card">
+            <div class="article-content">
+              <p class="article-tag">Async</p>
+              <h3>
+                <a href="./articles/async-await.html">Как работает async/await</a>
+              </h3>
+              <p>
+                Разбираем асинхронность в JavaScript простыми словами:
+                промисы, await, порядок выполнения и практическое применение.
+              </p>
+            </div>
+            <a class="article-link" href="./articles/async-await.html">Открыть статью →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="portfolio-section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="section-label">Проекты</p>
+          <h2>Избранное из портфолио</h2>
+        </div>
+
+        <div class="portfolio-list">
+          <article class="project-card">
+            <h3>Max Analyzer</h3>
+            <p>
+              Учебный JavaScript-проект для практики функций, массивов,
+              модулей и организации структуры кода.
+            </p>
+            <a href="https://github.com/your-github/max-analyzer" target="_blank">
+              GitHub проекта
+            </a>
+          </article>
+
+          <article class="project-card">
+            <h3>JS Algorithms</h3>
+            <p>
+              Практика алгоритмов и задач: сортировки, пересечения массивов,
+              работа со стеком и структурами данных.
+            </p>
+            <a href="https://github.com/your-github/js-algorithms" target="_blank">
+              GitHub проекта
+            </a>
+          </article>
+
+          <article class="project-card">
+            <h3>Node Training App</h3>
+            <p>
+              Учебный проект на Node.js, в котором я тренируюсь работать
+              с архитектурой приложения и backend-логикой.
+            </p>
+            <a href="https://github.com/your-github/node-training-app" target="_blank">
+              GitHub проекта
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-preview">
+      <div class="container about-preview-inner">
+        <div class="about-preview-text">
+          <p class="section-label">Обо мне</p>
+          <h2>Я изучаю JavaScript и Node.js и собираю здесь свой путь в разработке</h2>
+          <p>
+            Этот сайт — одновременно мой блог, учебная площадка и портфолио.
+            Здесь я фиксирую свои знания, практику и реальные мини-проекты.
+          </p>
+        </div>
+
+        <div class="about-preview-action">
+          <a class="btn btn-primary" href="about.html">Подробнее обо мне</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 NodeWave. Блог и портфолио JavaScript / Node.js разработчика.</p>
+      <a href="https://github.com/anisimV?tab=repositories" target="_blank">Перейти в GitHub</a>
+    </div>
+  </footer>
+</body>
+</html>
