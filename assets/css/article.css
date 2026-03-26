@@ -186,3 +186,24 @@
     font-size: 17px;
   }
 }
+
+.article-card pre {
+  overflow-x: auto;
+  margin: 18px 0;
+  padding: 18px;
+  border-radius: 16px;
+  background: #0b1220;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.article-card code {
+  font-family: Consolas, Monaco, 'Courier New', monospace;
+  font-size: 15px;
+  color: #dbeafe;
+}
+
+.article-card pre code {
+  display: block;
+  line-height: 1.7;
+  white-space: pre;
+}

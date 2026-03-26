@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Как работает async/await — NodeWave</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/article.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="../index.html">
+        <img src="../assets/img/logo/logo.png" alt="NodeWave logo" />
+      </a>
+
+      <nav class="site-nav">
+        <a href="../index.html">Главная</a>
+        <a href="../about.html">Обо мне</a>
+        <a href="../portfolio.html">Портфолио</a>
+        <a href="https://github.com/anisimV?tab=repositories" target="_blank">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="article-page">
+    <section class="article-hero">
+      <div class="container article-hero-inner">
+        <a class="back-link" href="../index.html">← Вернуться на главную</a>
+        <p class="article-category">Async</p>
+        <h1>Как работает async/await</h1>
+        <p class="article-lead">
+          Разбираем асинхронность в JavaScript простыми словами:
+          что такое Promise, зачем нужны async/await и как писать
+          более понятный асинхронный код.
+        </p>
+      </div>
+    </section>
+
+    <section class="article-content-section">
+      <div class="container article-layout">
+        <article class="article-content">
+          <div class="article-card">
+            <h2>Почему вообще нужна асинхронность</h2>
+            <p>
+              В JavaScript часто бывают задачи, которые не выполняются мгновенно.
+              Например:
+            </p>
+            <ul>
+              <li>запрос на сервер</li>
+              <li>чтение файла</li>
+              <li>ожидание ответа от базы данных</li>
+              <li>таймер</li>
+            </ul>
+            <p>
+              Если бы программа полностью останавливалась и ждала завершения
+              каждой такой операции, приложение работало бы медленно и неудобно.
+            </p>
+            <p>
+              Поэтому в JavaScript есть асинхронность — механизм,
+              который позволяет запускать долгую операцию и не блокировать
+              выполнение остального кода.
+            </p>
+          </div>
+
+          <div class="article-card">
+            <h2>Синхронный код</h2>
+            <p>
+              Синхронный код выполняется строго по порядку: строка за строкой.
+            </p>
+
+            <pre><code>console.log('Шаг 1');
+console.log('Шаг 2');
+console.log('Шаг 3');</code></pre>
+
+            <p>Результат будет таким:</p>
+
+            <pre><code>Шаг 1
+Шаг 2
+Шаг 3</code></pre>
+
+            <p>
+              Тут всё просто: каждая следующая команда начинается только после
+              завершения предыдущей.
+            </p>
+          </div>
+
+          <div class="article-card">
+            <h2>Асинхронный пример с setTimeout</h2>
+            <p>
+              Теперь посмотрим на простой асинхронный пример:
+            </p>
+
+            <pre><code>console.log('Начало');
+
+setTimeout(() => {
+  console.log('Сообщение с задержкой');
+}, 2000);
+
+console.log('Конец');</code></pre>
+
+            <p>Многие новички ожидают такой порядок:</p>
+
+            <pre><code>Начало
+Сообщение с задержкой
+Конец</code></pre>
+
+            <p>Но на самом деле будет так:</p>
+
+            <pre><code>Начало
+Конец
+Сообщение с задержкой</code></pre>
+
+            <p>
+              Почему? Потому что `setTimeout()` запускает асинхронную задачу.
+              JavaScript не ждёт 2 секунды на этой строке, а идёт дальше,
+              выполняя остальной код.
+            </p>
+          </div>
+
+          <div class="article-card">
+            <h2>Что такое Promise</h2>
+            <p>
+              Promise — это объект, который представляет результат асинхронной операции.
+            </p>
+            <p>
+              Если говорить очень просто, Promise — это “обещание”,
+              что результат появится позже:
+            </p>
+            <ul>
+              <li>либо успешно</li>
+              <li>либо с ошибкой</li>
+            </ul>
+
+            <pre><code>const promise = new Promise((resolve, reject) => {
+  const success = true;
+
+  if (success) {
+    resolve('Операция выполнена');
+  } else {
+    reject('Произошла ошибка');
+  }
+});</code></pre>
+
+            <p>
+              Здесь:
+            </p>
+            <ul>
+              <li>`resolve()` означает успешное завершение</li>
+              <li>`reject()` означает ошибку</li>
+            </ul>
+          </div>
+
+          <div class="article-card">
+            <h2>Как работать с Promise через then/catch</h2>
+            <p>
+              До `async/await` с Promise обычно работали так:
+            </p>
+
+            <pre><code>const getData = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve('Данные получены');
+    }, 1500);
+  });
+};
+
+getData()
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.log(error);
+  });</code></pre>
+
+            <p>
+              Этот вариант рабочий, но когда асинхронных шагов становится много,
+              код начинает становиться менее удобным для чтения.
+            </p>
+          </div>
+
+          <div class="article-card">
+            <h2>Что делает async</h2>
+            <p>
+              Ключевое слово `async` ставится перед функцией.
+              Оно означает, что функция всегда возвращает Promise.
+            </p>
+
+            <pre><code>async function sayHello() {
+  return 'Привет';
+}</code></pre>
+
+            <p>
+              Хотя кажется, что функция просто возвращает строку,
+              на самом деле JavaScript оборачивает результат в Promise.
+            </p>
+          </div>
+
+          <div class="article-card">
+            <h2>Что делает await</h2>
+            <p>
+              `await` можно использовать только внутри `async`-функции.
+              Он говорит: “подожди результат Promise, а потом продолжай”.
+            </p>
+
+            <pre><code>const getData = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve('Данные загружены');
+    }, 1500);
+  });
+};
+
+async function showData() {
+  const result = await getData();
+  console.log(result);
+}
+
+showData();</code></pre>
+
+            <p>
+              Здесь происходит следующее:
+            </p>
+            <ol>
+              <li>вызывается `showData()`</li>
+              <li>внутри вызывается `getData()`</li>
+              <li>`await` ждёт, пока Promise завершится</li>
+              <li>после этого результат записывается в `result`</li>
+              <li>значение выводится в консоль</li>
+            </ol>
+          </div>
+
+          <div class="article-card">
+            <h2>Чем async/await удобнее</h2>
+            <p>
+              Главное преимущество в том, что код выглядит почти как обычный
+              последовательный код.
+            </p>
+
+            <p>Через `then`:</p>
+
+            <pre><code>getUser()
+  .then((user) => {
+    return getPosts(user.id);
+  })
+  .then((posts) => {
+    console.log(posts);
+  })
+  .catch((error) => {
+    console.log(error);
+  });</code></pre>
+
+            <p>Через `async/await`:</p>
+
+            <pre><code>async function showPosts() {
+  try {
+    const user = await getUser();
+    const posts = await getPosts(user.id);
+
+    console.log(posts);
+  } catch (error) {
+    console.log(error);
+  }
+}</code></pre>
+
+            <p>
+              Второй вариант обычно легче читать, особенно если шагов несколько.
+            </p>
+          </div>
+
+          <div class="article-card">
+            <h2>Как обрабатывать ошибки</h2>
+            <p>
+              При работе с `async/await` ошибки обычно обрабатывают через `try...catch`.
+            </p>
+
+            <pre><code>const getUser = () => {
+  return new Promise((resolve, reject) => {
+    const hasError = false;
+
+    if (hasError) {
+      reject('Не удалось получить пользователя');
+    } else {
+      resolve({ id: 1, name: 'Anisim' });
+    }
+  });
+};
+
+async function loadUser() {
+  try {
+    const user = await getUser();
+    console.log(user);
+  } catch (error) {
+    console.log('Ошибка:', error);
+  }
+}
+
+loadUser();</code></pre>
+
+            <p>
+              Если Promise завершится с ошибкой, управление перейдёт в блок `catch`.
+            </p>
+          </div>
+
+          <div class="article-card">
+            <h2>Пример из реальной логики</h2>
+            <p>
+              Представим, что мы сначала загружаем пользователя,
+              а потом по его `id` загружаем список задач.
+            </p>
+
+            <pre><code>const getUser = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ id: 7, name: 'Anisim' });
+    }, 1000);
+  });
+};
+
+const getTasks = (userId) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve([
+        { id: 1, title: 'Изучить async/await' },
+        { id: 2, title: 'Сделать mini project' }
+      ]);
+    }, 1000);
+  });
+};
+
+async function showTasks() {
+  try {
+    const user = await getUser();
+    const tasks = await getTasks(user.id);
+
+    console.log('Пользователь:', user.name);
+    console.log('Задачи:', tasks);
+  } catch (error) {
+    console.log('Ошибка:', error);
+  }
+}
+
+showTasks();</code></pre>
+
+            <p>
+              Такой код читается намного проще, чем длинная цепочка `.then()`.
+            </p>
+          </div>
+
+          <div class="article-card">
+            <h2>Частые ошибки новичков</h2>
+            <ul>
+              <li>используют `await` вне `async`-функции</li>
+              <li>забывают обрабатывать ошибки</li>
+              <li>думают, что `async` делает код полностью синхронным</li>
+              <li>не понимают, что `async`-функция возвращает Promise</li>
+            </ul>
+
+            <p>Например, вот так делать нельзя:</p>
+
+            <pre><code>function loadData() {
+  const result = await getData();
+  console.log(result);
+}</code></pre>
+
+            <p>
+              Здесь будет ошибка, потому что `await` можно использовать
+              только внутри `async`-функции.
+            </p>
+          </div>
+
+          <div class="article-card">
+            <h2>Итог</h2>
+            <p>
+              `async/await` — это удобный способ работать с асинхронным кодом
+              в JavaScript.
+            </p>
+            <p>
+              Он не отменяет Promise, а просто даёт более понятный синтаксис
+              для работы с ними.
+            </p>
+            <p>
+              Если ты понимаешь:
+            </p>
+            <ul>
+              <li>что асинхронные операции завершаются не сразу</li>
+              <li>что Promise хранит будущий результат</li>
+              <li>что `await` ждёт завершения Promise</li>
+              <li>что ошибки обрабатываются через `try...catch`</li>
+            </ul>
+            <p>
+              значит ты уже хорошо понимаешь основу темы.
+            </p>
+          </div>
+        </article>
+
+        <aside class="article-sidebar">
+          <div class="sidebar-card">
+            <p class="sidebar-label">Коротко</p>
+            <h3>О чём статья</h3>
+            <p>
+              В этой статье простыми словами объясняется асинхронность,
+              Promise, async, await и обработка ошибок с примерами кода.
+            </p>
+          </div>
+
+          <div class="sidebar-card">
+            <p class="sidebar-label">Дальше</p>
+            <h3>Что изучать после</h3>
+            <ul>
+              <li>fetch</li>
+              <li>REST API</li>
+              <li>Express.js</li>
+              <li>обработка ошибок</li>
+              <li>работа с базой данных</li>
+            </ul>
+          </div>
+
+          <div class="sidebar-card">
+            <p class="sidebar-label">Навигация</p>
+            <h3>Полезные ссылки</h3>
+            <a class="sidebar-link" href="../index.html">На главную</a>
+            <a class="sidebar-link" href="./nodejs-start.html">Статья про Node.js</a>
+            <a class="sidebar-link" href="./javascript-basics.html">Статья про JavaScript</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 NodeWave. Блог и портфолио JavaScript / Node.js разработчика.</p>
+      <a href="https://github.com/anisimV?tab=repositories" target="_blank">Перейти в GitHub</a>
+    </div>
+  </footer>
+</body>
+</html>
